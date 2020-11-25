@@ -2,12 +2,9 @@ import React, { useState, useContext } from "react";
 import { Link, useHistory } from "react-router-dom";
 import M from "materialize-css";
 import AxiosInstance from "../../helpers/axios";
-import { UserContext } from "../../App";
-function Signin() {
-  const [password, setPassword] = useState("");
+function Reset() {
   const [email, setEmail] = useState("");
   const history = useHistory();
-  const { state, dispatch } = useContext(UserContext);
 
   const handleSubmit = () => {
     const config = {
@@ -17,27 +14,22 @@ function Signin() {
     };
     const dataToSubmit = {
       email: email,
-      password: password,
     };
-    AxiosInstance.post("/router/auth/signin", dataToSubmit, config)
+    AxiosInstance.post("/router/auth/resetpassword", dataToSubmit, config)
       .then((res) => {
         if (res) {
           console.log(res);
-          localStorage.setItem("jwt", res.data.token);
-          localStorage.setItem("user", JSON.stringify(res.data.user));
-          dispatch({ type: "USER", payload: res.data.user });
           M.toast({
-            html: "Signin Success",
+            html: "Check your mail",
             classes: "#43a047 green darken-1",
           });
-          history.push("/");
         }
       })
       .catch((err) => {
         if (err) {
           console.log(err);
           M.toast({
-            html: err?.response?.data?.message,
+            html: err?.response?.data?.error,
             classes: "#c62828 red darken-3",
           });
         }
@@ -53,28 +45,15 @@ function Signin() {
           type="text"
           placeholder="Email"
         />
-        <input
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          type="password"
-          placeholder="Password"
-        />
         <button
           onClick={handleSubmit}
           className="btn waves-effect waves-light #64b5f6 blue lighten-2"
         >
-          Signin
+          Reset Password
         </button>
-        <h5>
-          <Link to="/signup">Don't have account ?</Link>{" "}
-        </h5>
-        <h6>
-          {" "}
-          <Link to="/reset">Forgot password ?</Link>{" "}
-        </h6>
       </div>
     </div>
   );
 }
 
-export default Signin;
+export default Reset;

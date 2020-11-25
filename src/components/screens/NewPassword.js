@@ -1,14 +1,14 @@
 import React, { useState, useContext } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useHistory, useParams } from "react-router-dom";
 import M from "materialize-css";
 import AxiosInstance from "../../helpers/axios";
 import { UserContext } from "../../App";
-function Signin() {
+function NewPassword() {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const history = useHistory();
-  const { state, dispatch } = useContext(UserContext);
-
+  const { token } = useParams();
+  //   console.log(token);
   const handleSubmit = () => {
     const config = {
       headers: {
@@ -16,21 +16,18 @@ function Signin() {
       },
     };
     const dataToSubmit = {
-      email: email,
       password: password,
+      token,
     };
-    AxiosInstance.post("/router/auth/signin", dataToSubmit, config)
+    AxiosInstance.post("/router/auth/newpassword", dataToSubmit, config)
       .then((res) => {
         if (res) {
           console.log(res);
-          localStorage.setItem("jwt", res.data.token);
-          localStorage.setItem("user", JSON.stringify(res.data.user));
-          dispatch({ type: "USER", payload: res.data.user });
           M.toast({
-            html: "Signin Success",
+            html: "Password Update Success",
             classes: "#43a047 green darken-1",
           });
-          history.push("/");
+          history.push("/signin");
         }
       })
       .catch((err) => {
@@ -47,34 +44,22 @@ function Signin() {
     <div className="myCard">
       <div className="card auth-card input-field">
         <h2>Instagram</h2>
-        <input
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          type="text"
-          placeholder="Email"
-        />
+
         <input
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           type="password"
-          placeholder="Password"
+          placeholder="Enter New Password"
         />
         <button
           onClick={handleSubmit}
           className="btn waves-effect waves-light #64b5f6 blue lighten-2"
         >
-          Signin
+          Reset Password
         </button>
-        <h5>
-          <Link to="/signup">Don't have account ?</Link>{" "}
-        </h5>
-        <h6>
-          {" "}
-          <Link to="/reset">Forgot password ?</Link>{" "}
-        </h6>
       </div>
     </div>
   );
 }
 
-export default Signin;
+export default NewPassword;

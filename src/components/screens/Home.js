@@ -39,7 +39,7 @@ function Home() {
 
         setData(newData);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log(err.response.data));
   };
   const unlikePost = (id) => {
     const config = {
@@ -61,7 +61,7 @@ function Home() {
 
         setData(newData);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log(err.response.data));
   };
 
   const commentPost = (text, postId) => {
@@ -85,7 +85,7 @@ function Home() {
 
         setData(newData);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log(err.response.data));
   };
 
   const deletePost = (id) => {
@@ -103,7 +103,7 @@ function Home() {
         });
         setData(newData);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log(err.response.data));
   };
 
   useEffect(() => {
